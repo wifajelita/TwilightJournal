@@ -1,0 +1,34 @@
+{
+  "app": "TwilightJournal",
+  "version": "1.0",
+  "exportedAt": "2026-09-01T04:00:00.000Z",
+  "entries": [
+    {
+      "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "title": "Malam Pertama di Bawah Bintang",
+      "content": "Hari ini aku mulai menulis journal lagi. Langit malam terlihat sangat indah, bintang-bintang berkilau seperti debu kosmik. Rasanya tenang sekali.\n\nSemoga TwilightJournal bisa menjadi tempat yang nyaman untuk mencurahkan isi hati.",
+      "date": "2026-09-01",
+      "mood": "calm",
+      "createdAt": "2026-09-01T10:00:00.000Z",
+      "updatedAt": "2026-09-01T10:00:00.000Z"
+    },
+    {
+      "id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+      "title": "Rasa Syukur Hari Ini",
+      "content": "Bersyukur bisa bangun pagi dengan sehat. Sempat minum kopi sambil melihat matahari terbit. Kecil, tapi berarti.",
+      "date": "2026-08-30",
+      "mood": "grateful",
+      "createdAt": "2026-08-30T07:30:00.000Z",
+      "updatedAt": "2026-08-30T07:30:00.000Z"
+    },
+    {
+      "id": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+      "title": "Ide Proyek Baru",
+      "content": "Kepala penuh ide hari ini. Mau bikin sesuatu yang berhubungan dengan space theme. Mungkin next project setelah journal ini.",
+      "date": "2026-08-28",
+      "mood": "excited",
+      "createdAt": "2026-08-28T21:15:00.000Z",
+      "updatedAt": "2026-08-28T21:15:00.000Z"
+    }
+  ]
+}
