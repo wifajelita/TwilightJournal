@@ -1,41 +1,45 @@
-# TwilightJournal ✦
+# TwilightJournal ✦ (Enhanced)
 
-Cosmic-themed personal journal web app.  
-Cocok di-host di **GitHub Pages** (static, pure client-side).
+Cosmic-themed personal journal web app — cocok untuk GitHub Pages.
 
-## Fitur
+## Fitur Baru
 
-- Tambah / edit / hapus entri journal
-- Pilih mood (Happy, Calm, Sad, Excited, Thoughtful, Grateful)
-- Cari & filter berdasarkan mood
-- Data disimpan di **localStorage** browser
-- Export & Import JSON
-- Tema deep space blue + cosmic purple
-- Responsive
+- **Prompt Journaling** — 20+ prompt siap pakai
+- **Statistik** — total entri, streak, mood chart, insight
+- **Manfaat Journaling** — edukasi + tips
+- **Target Harian** — progress bar + bisa atur target (1–10 entri/hari)
+- **Background Music** — autoplay lagu 1, bisa ganti ke lagu 2 atau 3
+- Quote inspiratif acak di halaman awal
+- Search, filter mood, export/import JSON
 
-## Cara Pakai
+## Struktur Folder
 
-1. Buka `index.html` di browser, atau
-2. Deploy ke GitHub Pages:
-   - Buat repo baru
-   - Upload semua file di folder ini
-   - Settings → Pages → Source: Deploy from branch `main` / folder `/ (root)`
+```
+TwilightJournal/
+├── index.html
+├── styles.css
+├── script.js
+├── sample-data.json
+├── README.md
+└── audio/
+    ├── track1.mp3   ← lagu default (autoplay)
+    ├── track2.mp3
+    └── track3.mp3
+```
 
-## File
+## Cara Pasang Musik
 
-| File              | Keterangan                          |
-|-------------------|-------------------------------------|
-| `index.html`      | Struktur utama                      |
-| `styles.css`      | Styling + tema kosmik               |
-| `script.js`       | Logika aplikasi                     |
-| `sample-data.json`| Contoh data untuk import            |
-| `README.md`       | Dokumentasi ini                     |
+1. Masukkan 3 file MP3 ke folder `audio/`
+2. Rename menjadi:
+   - `track1.mp3` (akan diputar otomatis saat buka app)
+   - `track2.mp3`
+   - `track3.mp3`
+3. Buka `index.html` — musik akan mencoba autoplay.
+   (Beberapa browser memblokir autoplay sampai ada interaksi klik/keyboard pertama.)
 
-## Import Sample Data
+## Deploy GitHub Pages
 
-1. Buka aplikasi
-2. Klik tombol **Import**
-3. Pilih file `sample-data.json`
+Upload semua file (termasuk folder `audio/`) ke repo, lalu aktifkan Pages dari branch `main`.
 
 ---
 

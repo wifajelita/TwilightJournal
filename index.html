@@ -12,8 +12,10 @@
 <body>
   <div class="stars" id="stars"></div>
 
+  <!-- Hidden audio player (no visible controls) -->
+  <audio id="bgMusic" loop preload="auto"></audio>
+
   <div class="app">
-    <!-- Sidebar -->
     <aside class="sidebar">
       <div class="logo">
         <span class="logo-icon">✦</span>
@@ -23,6 +25,34 @@
       <button class="btn btn-primary" id="btnNewEntry">
         <span>+</span> Entri Baru
       </button>
+
+      <div class="quick-tools">
+        <button class="tool-btn" id="btnPrompt" title="Prompt Harian">💡 Prompt</button>
+        <button class="tool-btn" id="btnStats" title="Statistik">📊 Stats</button>
+        <button class="tool-btn" id="btnBenefits" title="Manfaat Journaling">✨ Manfaat</button>
+      </div>
+
+      <!-- Daily Writing Goal -->
+      <div class="daily-goal">
+        <div class="daily-goal-header">
+          <span>🎯 Target Hari Ini</span>
+          <strong id="goalProgressText">0/1</strong>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="goalProgressBar"></div>
+        </div>
+        <div class="goal-status" id="goalStatus">Belum menulis hari ini</div>
+      </div>
+
+      <!-- Music Selector -->
+      <div class="music-box">
+        <div class="music-box-label">🎵 Suasana Musik</div>
+        <select class="music-select" id="musicSelect">
+          <option value="0">Lagu 1 — Default</option>
+          <option value="1">Lagu 2</option>
+          <option value="2">Lagu 3</option>
+        </select>
+      </div>
 
       <div class="search-box">
         <input type="text" id="searchInput" placeholder="Cari entri..." autocomplete="off" />
@@ -40,9 +70,7 @@
         </select>
       </div>
 
-      <div class="entry-list" id="entryList">
-        <!-- Entries will be rendered here -->
-      </div>
+      <div class="entry-list" id="entryList"></div>
 
       <div class="sidebar-footer">
         <button class="btn btn-ghost" id="btnExport" title="Export JSON">Export</button>
@@ -51,12 +79,44 @@
       </div>
     </aside>
 
-    <!-- Main Content -->
     <main class="main">
       <div class="empty-state" id="emptyState">
         <div class="empty-icon">✦</div>
         <h2>Selamat datang di TwilightJournal</h2>
-        <p>Catat perjalananmu di antara bintang-bintang.<br />Klik <strong>+ Entri Baru</strong> untuk memulai.</p>
+        <p class="empty-desc">Catat perjalananmu di antara bintang-bintang.<br />Klik <strong>+ Entri Baru</strong> untuk memulai.</p>
+
+        <div class="welcome-cards">
+          <div class="welcome-card">
+            <span class="wc-icon">🔥</span>
+            <div>
+              <strong id="streakDisplay">0 hari</strong>
+              <span>Streak menulis</span>
+            </div>
+          </div>
+          <div class="welcome-card">
+            <span class="wc-icon">📝</span>
+            <div>
+              <strong id="totalDisplay">0</strong>
+              <span>Total entri</span>
+            </div>
+          </div>
+          <div class="welcome-card">
+            <span class="wc-icon">💫</span>
+            <div>
+              <strong id="moodDisplay">—</strong>
+              <span>Mood dominan</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="daily-quote" id="dailyQuote">
+          <p>“Journaling is like whispering to one’s self and listening at the same time.”</p>
+          <span>— Mina Murray</span>
+        </div>
+
+        <button class="btn btn-primary" id="btnStartPrompt" style="margin-top: 0.35rem;">
+          💡 Mulai dengan Prompt Hari Ini
+        </button>
       </div>
 
       <div class="editor-view" id="editorView" hidden>
@@ -73,6 +133,12 @@
               <option value="grateful">🙏 Grateful</option>
             </select>
           </div>
+        </div>
+
+        <div class="prompt-bar" id="promptBar" hidden>
+          <span class="prompt-label">💡 Prompt:</span>
+          <span id="activePromptText"></span>
+          <button class="btn-icon" id="btnClearPrompt" title="Tutup prompt">×</button>
         </div>
 
         <textarea id="entryContent" placeholder="Tulis isi hatimu di sini..."></textarea>
@@ -100,6 +166,109 @@
         </div>
       </div>
     </main>
+  </div>
+
+  <!-- Prompt Modal -->
+  <div class="modal-overlay" id="promptModal" hidden>
+    <div class="modal">
+      <div class="modal-header">
+        <h3>💡 Prompt Journaling</h3>
+        <button class="btn-icon modal-close" data-close="promptModal">×</button>
+      </div>
+      <div class="modal-body">
+        <p class="prompt-text" id="promptText"></p>
+        <p class="prompt-hint">Gunakan prompt ini sebagai titik awal. Tidak harus diikuti persis.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="btnShufflePrompt">🔀 Ganti Prompt</button>
+        <button class="btn btn-primary" id="btnUsePrompt">Pakai & Tulis</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Modal -->
+  <div class="modal-overlay" id="statsModal" hidden>
+    <div class="modal modal-wide">
+      <div class="modal-header">
+        <h3>📊 Statistik Journaling</h3>
+        <button class="btn-icon modal-close" data-close="statsModal">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="stats-grid" id="statsGrid"></div>
+        <div class="mood-chart" id="moodChart"></div>
+        <div class="stats-insight" id="statsInsight"></div>
+        <div class="goal-setting">
+          <label>Target entri per hari:</label>
+          <input type="number" id="goalTargetInput" min="1" max="10" value="1" />
+          <button class="btn btn-ghost" id="btnSaveGoal" style="padding: 0.3rem 0.7rem; font-size: 0.78rem;">Simpan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Benefits Modal -->
+  <div class="modal-overlay" id="benefitsModal" hidden>
+    <div class="modal modal-wide">
+      <div class="modal-header">
+        <h3>✨ Manfaat Journaling</h3>
+        <button class="btn-icon modal-close" data-close="benefitsModal">×</button>
+      </div>
+      <div class="modal-body benefits-body">
+        <div class="benefit-card">
+          <span class="b-icon">🧠</span>
+          <div>
+            <h4>Kesehatan Mental</h4>
+            <p>Menulis membantu mengurangi stres, kecemasan, dan pikiran yang berputar. Otak jadi lebih tenang karena pikiran “dikeluarkan”.</p>
+          </div>
+        </div>
+        <div class="benefit-card">
+          <span class="b-icon">🎯</span>
+          <div>
+            <h4>Kejernihan Pikiran & Fokus</h4>
+            <p>Journaling memaksa kita merapikan pikiran. Banyak orang menemukan solusi hanya dengan menulisnya secara jujur.</p>
+          </div>
+        </div>
+        <div class="benefit-card">
+          <span class="b-icon">📈</span>
+          <div>
+            <h4>Pelacak Pertumbuhan Diri</h4>
+            <p>Dengan membaca entri lama, kamu bisa melihat seberapa jauh sudah berkembang — pola pikir, kebiasaan, dan pencapaian.</p>
+          </div>
+        </div>
+        <div class="benefit-card">
+          <span class="b-icon">🙏</span>
+          <div>
+            <h4>Meningkatkan Rasa Syukur</h4>
+            <p>Menulis hal yang disyukuri setiap hari terbukti meningkatkan kebahagiaan dan mengurangi fokus pada kekurangan.</p>
+          </div>
+        </div>
+        <div class="benefit-card">
+          <span class="b-icon">💪</span>
+          <div>
+            <h4>Regulasi Emosi</h4>
+            <p>Memberi nama pada emosi (mood tracking) membantu mengelolanya lebih baik. Kamu jadi lebih aware terhadap pola perasaan.</p>
+          </div>
+        </div>
+        <div class="benefit-card">
+          <span class="b-icon">🌙</span>
+          <div>
+            <h4>Tidur Lebih Nyenyak</h4>
+            <p>Menulis sebelum tidur (brain dump) membantu melepaskan beban pikiran sehingga lebih mudah terlelap.</p>
+          </div>
+        </div>
+        <div class="tips-box">
+          <h4>💡 Tips Journaling yang Efektif</h4>
+          <ul>
+            <li>Tidak harus panjang — 5–10 menit sudah cukup.</li>
+            <li>Jujur. Tidak ada yang akan menilai tulisanmu.</li>
+            <li>Konsisten lebih penting daripada sempurna.</li>
+            <li>Gunakan prompt jika sedang buntu ide.</li>
+            <li>Baca ulang entri lama sesekali untuk refleksi.</li>
+            <li>Tetapkan target harian kecil agar kebiasaan terbentuk.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="script.js"></script>
